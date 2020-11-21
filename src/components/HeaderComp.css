@@ -1,0 +1,26 @@
+.ContainTags {
+    display: block;
+    text-align: center;
+}
+
+.SetHeader {
+    display: block;
+}
+
+.MainHeader {
+    display: block;
+    text-align: center;
+    font-family: Tahoma;
+    font-size: 44px;
+    font-style: italic;
+    color: yellow;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+.App-link-selected {
+    color: 'yellow';
+    /* font-size: 44px; */
+}

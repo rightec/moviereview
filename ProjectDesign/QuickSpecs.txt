@@ -1,0 +1,3 @@
+#TEXT FILE TO KEEP SW PROJECT REQUIREMENT IN AN INFORMAL WAY
+
+1 - The carousel should be showned only if the HOME tag is selected

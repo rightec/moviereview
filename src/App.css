@@ -32,6 +32,7 @@
     color: #61dafb;
 }
 
+
 @keyframes App-logo-spin {
     from {
         transform: rotate(0deg);
@@ -53,6 +54,7 @@
     text-align: center;
 }
 
+/*
 .ContainTags {
     display: block;
     text-align: center;
@@ -68,4 +70,9 @@
     font-family: Tahoma;
     font-size: 44px;
     font-style: italic;
+}
+*/
+
+.Header {
+  margin-bottom: 50px;
 }

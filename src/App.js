@@ -21,15 +21,18 @@ function App() {
 import React from 'react'
 import TagList from './components/HeaderComp'
 import './App.css'
-import Carousel from './Carousel'
-import './Carousel.css'
+import Carousel from './components/Carousel'
+// import './Carousel.css'
 
 const tags = ['HOME', 'REVIEW']
+let selectedTag= tags[0]
+
 
 class App extends React.Component {
   constructor (props) {
     super(props)
-    this.state = { seconds: 1 }
+    this.state = { seconds: 1
+                  }
     // props.tags = ['HOME', 'REVIEW']
     // props.selectedTags = props.storedTags[0]
   }
@@ -60,10 +63,17 @@ class App extends React.Component {
           </div>
           <TagList
             tags={tags}
-            selectedTag={tags[0]}
+            selectedTag={selectedTag}
+            onTagClick={(e)=> {
+              console.log(e.target.name)
+              selectedTag = e.target.name
+            }
+          }
           />
         </div>
-        <Carousel />
+        
+        {/* console.log('selectedTag is: ',selectedTag) */}
+        {selectedTag === tags[0] ? <Carousel /> : null}
       </div>
     )
   }

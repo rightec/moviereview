@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import ItemsCarousel from 'react-items-carousel'
-import './Carousel.css'
-import goneWithTheWindImage from './images/1200px-PosterGone_With_the_Wind_01.jpg'
-import riseOfSkywalkerImage from './images/Rise_ofSkywalker.jpg'
-import pallottolaSpuntataImage from './images/pallottola.jpg'
-import tiffanyImage from './images/Breakfast_at_Tiffany.jpg'
-import oceanImage from './images/ocean.jpg'
-import stargateImage from './images/stargate.jpg'
-import jesusImage from './images/jesus.jpg'
+// import './Carousel.css'
+import goneWithTheWindImage from './../images/1200px-PosterGone_With_the_Wind_01.jpg'
+import riseOfSkywalkerImage from './../images/Rise_ofSkywalker.jpg'
+import pallottolaSpuntataImage from './../images/pallottola.jpg'
+import tiffanyImage from './../images/Breakfast_at_Tiffany.jpg'
+import oceanImage from './../images/ocean.jpg'
+import stargateImage from './../images/stargate.jpg'
+import jesusImage from './../images/jesus.jpg'
 /* Defined style class for images in Carousel */
 const imgStyle = {
   width: '600px',
