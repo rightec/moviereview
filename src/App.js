@@ -52,15 +52,17 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <div className='App'> {/* <h1>Number of seconds is {this.state.seconds}</h1> */} 
-          <div className='square'>
-            <div className='timeZone'> {this.myTime} </div>
+        <div className='Header'>
+          <div className='App'> {/* <h1>Number of seconds is {this.state.seconds}</h1> */}
+            <div className='square'>
+              <div className='timeZone'> {this.myTime} </div>
+            </div>
           </div>
+          <TagList
+            tags={tags}
+            selectedTag={tags[0]}
+          />
         </div>
-        <TagList
-          tags={tags}
-          selectedTag={tags[0]}
-        />
         <Carousel />
       </div>
     )
