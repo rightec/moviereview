@@ -22,6 +22,7 @@ import React from 'react'
 import TagList from './components/HeaderComp'
 import './App.css'
 import Carousel from './components/Carousel'
+import SearchEngine from './components/SearchEngine'
 // import './Carousel.css'
 
 const tags = ['HOME', 'REVIEW']
@@ -73,7 +74,7 @@ class App extends React.Component {
         </div>
         
         {/* console.log('selectedTag is: ',selectedTag) */}
-        {selectedTag === tags[0] ? <Carousel /> : null}
+        {selectedTag === tags[0] ? <Carousel /> : <SearchEngine />}
       </div>
     )
   }
