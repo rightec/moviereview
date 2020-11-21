@@ -21,6 +21,8 @@ function App() {
 import React from 'react'
 import TagList from './components/HeaderComp'
 import './App.css'
+import Carousel from './Carousel'
+import './Carousel.css'
 
 const tags = ['HOME', 'REVIEW']
 
@@ -51,14 +53,15 @@ class App extends React.Component {
     return (
       <div>
         <div className='App'> {/* <h1>Number of seconds is {this.state.seconds}</h1> */} 
-          <div class='square'>
-            <div class='timeZone'> {this.myTime} </div>
+          <div className='square'>
+            <div className='timeZone'> {this.myTime} </div>
           </div>
         </div>
         <TagList
           tags={tags}
           selectedTag={tags[0]}
         />
+        <Carousel />
       </div>
     )
   }
