@@ -21,3 +21,28 @@
     border-radius: 10px;
     border: none;
 }
+.SearchPanel{
+    margin: 20px;
+    display: inline-block;
+    border-color: yellowgreen;
+    border-style: solid;
+    padding: 10px;
+}
+
+.SearchRadio {
+    text-align: left;
+}
+
+.SearchPanelContainer {
+    border-color: yellowgreen;
+    border-style: solid;
+    margin: 20px;
+}
+
+.SearchSpin {
+    display: block;
+    margin: 5px;
+    text-align: center;
+    width: 50%;
+    margin-left: 25px;
+}
