@@ -6,6 +6,41 @@
 import './SearchEngine.css'
 import React, { Component } from "react";
 
+function composePath(status) {
+  let qSearch = ""
+  let key = ""
+
+  if (status.selectedOption === "Title"){
+    qSearch = gQueryTitle
+  } else{
+    qSearch = gQuerySearch
+  }
+
+  key = status.searchbox
+  let myPath = gPathRoot + qSearch + key  + gApiKey
+  console.log('myPath: ', myPath)
+  return myPath;
+  
+}
+
+
+const gApiKey = "&apikey=7eac09d1"; //My authorization key 
+//What i expect from DB as title
+const gColumnTable = ["Title","Year","Rated","Released","Runtime",
+                    "Genre","Director","Writer"];
+const gColumnTableSearch = ["Title","Year","imdbID","Type","Poster"];
+//set the path to download json file
+const gPathRoot = "http://www.omdbapi.com/"
+const gQuerySearch = "?s=";
+const gQueryTitle = "?t=";
+const gSearchKey ="Beau";
+const gQueryForYear = "?y=";
+const gYearKey = "1980";
+// "http://www.omdbapi.com/?s=Beau&apikey=7eac09d1";
+// let gPath = gPathRoot + gQueryForYear + gYearKey + gApiKey;
+let gPath = ""
+
+
 class SearchEngine extends Component {
   constructor() {
     super();
@@ -13,7 +48,11 @@ class SearchEngine extends Component {
       spinbox: 10,
       selectedOption: "Title",
       searchbox: "",
+      loading: false,
+      error: false,
+      // gPath: ""
     };
+
 
     this.onInputchange = this.onInputchange.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
@@ -21,6 +60,48 @@ class SearchEngine extends Component {
     this.onSearchClick = this.onSearchClick.bind(this);
     this.onSearchchange = this.onSearchchange.bind(this);
   }
+
+
+
+  // Fetch data from server
+  fetchMovieReview = async () => {
+    let review = {}
+    let error = false
+
+    try {
+      this.setState({ loading: true })
+      console.log('NEL TRY DATA: ', gPath)
+      let response = await fetch(gPath)
+      // console.log('NEL TRY DATA: ', this.state.gPath)
+      // let response = await fetch(this.state.gPath)
+      let data = await response.json()
+      // console.log('NEL TRY DATA: ', data)
+      // promise is still resolved even if no quotes got fetched (example: wrong url)
+      // need to handle this situation manually
+      // throw new Error blocks the execution, and jumps directly into 'CATCH'
+      if (data.error) throw new Error(data.error)
+
+      review = {...data}
+
+      // Work with review
+      console.log("review is: ", review);
+
+    } catch (err) {
+      console.log('SONO NEL CATCH: ', err)
+      error = true
+    } finally {
+      // using setState with prevState
+      // see https://css-tricks.com/understanding-react-setstate/
+      this.setState((prevState) => {
+        return {
+          ...this.state, // see immutables
+          loading: false,
+          error
+        }
+      })
+    }
+  }
+
 
   onSearchchange = (event) => {
     this.setState({searchbox: event.target.value});
@@ -32,6 +113,9 @@ class SearchEngine extends Component {
     console.log("spinBox is: ", this.state.spinbox);
     console.log("Option is:", this.state.selectedOption);
     console.log("Text is:", this.state.searchbox);
+    gPath = composePath(this.state);
+    // console.log("gPath:", this.state.gPath);
+   this.fetchMovieReview()
   }
 
   onInputchange(event) {
@@ -75,7 +159,7 @@ class SearchEngine extends Component {
                   onChange={this.onInputchange}
                 />
               </label>
-            <button className='SearchPanel' type="button" onClick={this.onSearchClick}>
+            <button className='SearchPanel' type="button" onClick={this.onSearchClick} disabled={this.state.loading}>
               SEARCH
             </button>
             <div className='SearchPanel' onChange={this.onChangeValue}>
