@@ -23,7 +23,7 @@ import TagList from './components/HeaderComp'
 import './App.css'
 import Carousel from './components/Carousel'
 import SearchEngine from './components/SearchEngine'
-// import './Carousel.css'
+import MovieTable from './components/MovieTable'
 
 const tags = ['HOME', 'REVIEW']
 let selectedTag= tags[0]
@@ -45,7 +45,7 @@ class App extends React.Component {
 
     this.timer = setInterval(() => {
       this.setState({ seconds: this.state.seconds + 1 })
-    }, 1000)
+    }, 10000)
   }
 
   // eslint-disable-next-line react/no-typos
@@ -74,7 +74,8 @@ class App extends React.Component {
         </div>
         
         {/* console.log('selectedTag is: ',selectedTag) */}
-        {selectedTag === tags[0] ? <Carousel /> : <SearchEngine />}
+        {/* selectedTag === tags[0] ? <Carousel /> : <SearchEngine />*/}
+        {selectedTag === tags[0] ? <Carousel /> : <MovieTable />}
       </div>
     )
   }

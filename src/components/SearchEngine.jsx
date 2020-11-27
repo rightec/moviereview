@@ -1,10 +1,9 @@
 // Search Engine component
 // Input text element to enter the text to search
-// ...
 
-// import React from 'react'
 import './SearchEngine.css'
 import React, { Component } from "react";
+import MovieTable from './MovieTable'
 
 function composePath(status) {
   let qSearch = ""
@@ -12,8 +11,10 @@ function composePath(status) {
 
   if (status.selectedOption === "Title"){
     qSearch = gQueryTitle
+    gColomnTitle = gColumnTable
   } else{
     qSearch = gQuerySearch
+    gColomnTitle = gColumnTableSearch
   }
 
   key = status.searchbox
@@ -23,12 +24,11 @@ function composePath(status) {
   
 }
 
-
 const gApiKey = "&apikey=7eac09d1"; //My authorization key 
 //What i expect from DB as title
 const gColumnTable = ["Title","Year","Rated","Released","Runtime",
                     "Genre","Director","Writer"];
-const gColumnTableSearch = ["Title","Year","imdbID","Type","Poster"];
+const gColumnTableSearch = ["Poster","Title","Type","Year","imdbID"];
 //set the path to download json file
 const gPathRoot = "http://www.omdbapi.com/"
 const gQuerySearch = "?s=";
@@ -39,7 +39,7 @@ const gYearKey = "1980";
 // "http://www.omdbapi.com/?s=Beau&apikey=7eac09d1";
 // let gPath = gPathRoot + gQueryForYear + gYearKey + gApiKey;
 let gPath = ""
-
+let gColomnTitle=[];
 
 class SearchEngine extends Component {
   constructor() {
@@ -50,7 +50,8 @@ class SearchEngine extends Component {
       searchbox: "",
       loading: false,
       error: false,
-      // gPath: ""
+      viewTable: false,
+      review: {}
     };
 
 
@@ -65,7 +66,7 @@ class SearchEngine extends Component {
 
   // Fetch data from server
   fetchMovieReview = async () => {
-    let review = {}
+    let localreview = {}
     let error = false
 
     try {
@@ -81,10 +82,13 @@ class SearchEngine extends Component {
       // throw new Error blocks the execution, and jumps directly into 'CATCH'
       if (data.error) throw new Error(data.error)
 
-      review = {...data}
+      this.setState({ viewTable: true })
+      this.setState({ review: data })
+      localreview = {...data}
 
       // Work with review
-      console.log("review is: ", review);
+      console.log("localreview is: ", localreview);
+      console.log("review is: ", this.state.review);
 
     } catch (err) {
       console.log('SONO NEL CATCH: ', err)
@@ -109,6 +113,7 @@ class SearchEngine extends Component {
   }
   
   onSearchClick(event) {
+    this.setState({ viewTable: false })
     console.log("SearchClick event: ", event.target);
     console.log("spinBox is: ", this.state.spinbox);
     console.log("Option is:", this.state.selectedOption);
@@ -187,7 +192,12 @@ class SearchEngine extends Component {
               </div>
             </div>
           </div>
-      </div>
+          <div>
+            <MovieTable/>
+            {/*this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review}/> : null*/}
+            {/*((this.state.viewTable === true) && (this.state.loading === false)) ? <MovieTable/> : null*/}
+          </div>
+      </div>      
     )
   }
 }
