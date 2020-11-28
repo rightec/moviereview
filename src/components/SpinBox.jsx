@@ -11,18 +11,18 @@ class Spin extends Component {
   }
 
   componentDidMount () {
-    console.log('Spin  is on Mount')
+    // console.log('Spin  is on Mount')
   }
 
   componentDidUpdate () {
-    console.log('Spin is on UPDATE')
+    // console.log('Spin is on UPDATE')
   }
 
   onInputchange(event) {
     this.setState({
       spinValue: event.target.value
     });
-    console.log('on Input changed',event.target.value);
+    console.log('SPIN BOX on Input changed',event.target.value);
   }
 
 

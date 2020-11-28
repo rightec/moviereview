@@ -11,15 +11,15 @@ class Check extends Component {
   }
 
   componentDidMount () {
-    console.log('Check  is on Mount')
+    // console.log('Check  is on Mount')
   }
 
   componentDidUpdate () {
-    console.log('check is on UPDATE')
+    // console.log('check is on UPDATE')
   }
 
   onValueChange(event) {
-    console.log('onValueChange',event.target.value);
+    console.log('CHECK COMP onValueChange',event.target.value);
     this.setState({
       selectedOption: event.target.value
     })
