@@ -130,7 +130,7 @@ class SearchEngine extends Component {
   }
 
   onChangeValue(event) {
-    console.log(event.target.value);
+    console.log('event.target.value',event.target.value);
   }
 
   onValueChange(event) {
@@ -192,10 +192,10 @@ class SearchEngine extends Component {
               </div>
             </div>
           </div>
-          <div>
-            <MovieTable/>
-            {/*this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review}/> : null*/}
-            {/*((this.state.viewTable === true) && (this.state.loading === false)) ? <MovieTable/> : null*/}
+          <div id='movieTableId'>
+            {/*console.log("gColomnTitle",gColomnTitle)*/}
+             {console.log("review",this.state.review)}
+            {this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review}/> : null}
           </div>
       </div>      
     )

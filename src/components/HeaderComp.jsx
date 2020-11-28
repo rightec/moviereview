@@ -13,8 +13,8 @@ const TagList = (props) => {
       <div className='ContainTags'>
         {props.tags.map((tag, index) =>
           <span className='HeadTags' key={`tag-${index}`}>
-            { /* console.log('props.selectedTag is:', props.selectedTag) */}
-            { /* console.log('tag is:', tag) */}
+            { console.log('props.selectedTag is:', props.selectedTag) }
+            { console.log('tag is:', tag) }
             <a
               name={tag}
               onClick={props.onTagClick}

@@ -2,11 +2,35 @@ import React from 'react'
 import './MovieTable.css'
 
 function build (myprops) { 
-    console.log("run buildtable");
-    let tableTitles = buildHeaderTables(myprops.columnsName);
-    /*if (tableTitles != null){
-        buildTables(myprops.search, tableTitles);
-    }*/
+    console.log("run buildtable", myprops);
+    let tableTitles = document.getElementById('tableId')
+    if (tableTitles === null){
+        tableTitles = buildHeaderTables(myprops.columnsName);
+    }
+
+    if (myprops.search.Title !== undefined){
+        if (tableTitles != null){
+            console.log("myprops.search is ", myprops.search.Title);
+            // buildTables(myprops.search, tableTitles);
+        }
+    } else{
+        let tempArray = myprops.search;
+        let bHasProp = false;
+        bHasProp = tempArray.hasOwnProperty('Search')
+        if ((tempArray !== null) && (tempArray !== undefined) && 
+            (tempArray.lenght !== 0) && (bHasProp === true)){
+            console.log(tempArray)
+            let searchArray = tempArray.Search[0];
+            if (searchArray !== null){
+                console.log("myprops.search is Iterable");
+                buildTables(myprops.search.Search, tableTitles);
+            } else {
+                console.log("myprops.search.Search[0] is NULL");
+            }
+        }else{
+            console.log("myprops.search is NULL or undef", tempArray);
+        }
+    }
 }
 
 
@@ -27,15 +51,26 @@ function buildTables(jsonObject, table) {
 
 function buildHeaderTables(columns) {
     console.log( "buildHeaderTables ENTER ", columns);
-
-    /*
+    let h1 = document.getElementById('myHeaderId')
+    if (h1 === null){
+        h1 = document.createElement("H1");   // Create a <H1> element
+        h1.innerHTML = "MOVIES FOUND"
+        h1.id = 'myHeaderId'
+    } else {
+        console.log ("H1 already build", h1)
+    }
+    
     //find my element
-    let movieTableRoot = document.getElementById('movieTableId')
+    let startTagTable = document.getElementById('movieTableId')
+    startTagTable.append(h1);
+    
+    let movieTableRoot = h1
 
     //Create table
     
     let table = document.createElement('table');
     movieTableRoot.append(table);
+    table.id = 'tableId'
 
     let tr = document.createElement("tr");
     table.append(tr);
@@ -52,7 +87,6 @@ function buildHeaderTables(columns) {
         tr.append(thTable);
     }
     return table;
-    */
 }
 
 function gestisciClick(e) {
@@ -86,10 +120,10 @@ function gestisciClick(e) {
 
 const MovieTable = (props) => {
   return (
-    <div className='mainMovieTable' id="movieTableId">
-        <h1>MOVIES FOUND</h1>
-        { /*build(props) */}
-        {console.log("MovieTable")}
+    <div className='mainMovieTable'>
+        {console.log("props: ", props)}
+        {build(props)}
+        {/*console.log("MovieTable")*/}
     </div>
   )
 }
