@@ -4,6 +4,7 @@
 import './SearchEngine.css'
 import React, { Component } from "react";
 import MovieTable from './MovieTable'
+import Spin from './SpinBox'
 
 function composePath(status) {
   let qSearch = ""
@@ -40,12 +41,11 @@ const gYearKey = "1980";
 // let gPath = gPathRoot + gQueryForYear + gYearKey + gApiKey;
 let gPath = ""
 let gColomnTitle=[];
-
+let spinbox = 1;
 class SearchEngine extends Component {
   constructor() {
     super();
     this.state = {
-      spinbox: 10,
       selectedOption: "Title",
       searchbox: "",
       loading: false,
@@ -53,13 +53,17 @@ class SearchEngine extends Component {
       viewTable: false,
       review: {}
     };
-
+    
 
     this.onInputchange = this.onInputchange.bind(this);
     this.onChangeValue = this.onChangeValue.bind(this);
     this.onValueChange = this.onValueChange.bind(this);
     this.onSearchClick = this.onSearchClick.bind(this);
     this.onSearchchange = this.onSearchchange.bind(this);
+  }
+
+  componentDidUpdate() {
+    console.log("Search Update")
   }
 
 
@@ -72,18 +76,11 @@ class SearchEngine extends Component {
     try {
       this.setState({ loading: true })
       console.log('Start Try Catch: ', gPath)
-      let response = await fetch(gPath)
-      // console.log('NEL TRY DATA: ', this.state.gPath)
-      // let response = await fetch(this.state.gPath)
+      let response = await fetch(gPath)      
       let data = await response.json()
-      // console.log('NEL TRY DATA: ', data)
-      // promise is still resolved even if no quotes got fetched (example: wrong url)
-      // need to handle this situation manually
-      // throw new Error blocks the execution, and jumps directly into 'CATCH'
+
       if (data.error) throw new Error(data.error)
 
-      // this.setState({ viewTable: true, review: data})
-      // this.setState({ review: data })
       localreview = {...data}
 
       // Work with review
@@ -94,17 +91,8 @@ class SearchEngine extends Component {
       console.log('SONO NEL CATCH: ', err)
       error = true
     } finally {
-      // using setState with prevState
-      // see https://css-tricks.com/understanding-react-setstate/
-      /*this.setState((prevState) => {
-        return {
-          ...this.state, // see immutables
-          loading: false,
-          error
-        }
-      })*/
-      console.log ("Start Finally and set State")
-      this.setState({ viewTable: true, review: localreview, loading: false})
+        console.log ("Start Finally and set State")
+        this.setState({ viewTable: true, review: localreview, loading: false})
     }
   }
 
@@ -117,7 +105,7 @@ class SearchEngine extends Component {
   onSearchClick(event) {
     this.setState({ viewTable: false })
     console.log("SearchClick event: ", event.target);
-    console.log("spinBox is: ", this.state.spinbox);
+    console.log("spinBox is: ", spinbox);
     console.log("Option is:", this.state.selectedOption);
     console.log("Text is:", this.state.searchbox);
     gPath = composePath(this.state);
@@ -126,9 +114,10 @@ class SearchEngine extends Component {
   }
 
   onInputchange(event) {
-    this.setState({
+    /*this.setState({
       [event.target.name]: event.target.value
-    });
+    });*/
+    console.log('on Input changed',event.target.value);
   }
 
   onChangeValue(event) {
@@ -136,6 +125,7 @@ class SearchEngine extends Component {
   }
 
   onValueChange(event) {
+    console.log('onValueChange',event.target.value);
     this.setState({
       selectedOption: event.target.value
     })
@@ -147,6 +137,7 @@ class SearchEngine extends Component {
     return (
       <div className='SearchEngine'>
           <h2>SEARCH BOX</h2>
+          {console.log("spinbox is:", spinbox)}
           <input className='SearchBox' 
             name="fname" 
             type="text" 
@@ -156,15 +147,7 @@ class SearchEngine extends Component {
           <div className='SearchPanelContainer'>
             <label className='SearchPanel'>
                 Item to Show :
-                <input className='SearchSpin'
-                  name="spinbox"
-                  type="number"
-                  value={this.state.spinbox}
-                  required
-                  min="10" 
-                  max="20"
-                  onChange={this.onInputchange}
-                />
+                <Spin />
               </label>
             <button className='SearchPanel' type="button" onClick={this.onSearchClick} disabled={this.state.loading}>
               SEARCH
@@ -195,8 +178,7 @@ class SearchEngine extends Component {
             </div>
           </div>
           <div id='movieTableId'>
-            {/*console.log("gColomnTitle",gColomnTitle)*/}
-             {console.log("review",this.state.review)}
+            {console.log("review",this.state.review)}
             {this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review}/> : null}
           </div>
       </div>      
