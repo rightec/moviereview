@@ -9,3 +9,8 @@
 .backGray{
     background-color: gray;
 }
+
+#tableId {
+    font-size: 12px;
+    width:100%
+}

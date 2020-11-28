@@ -1,56 +1,179 @@
 import React from 'react'
 import './MovieTable.css'
 
+const colToUseInAnySearch = 4;
+const colExpectedInAnySearch = 5;
+const colExpectedInTitleSearch = 8;
+const titleFieldMask = {
+    Actors: true,
+    Awards: false,
+    BoxOffice: false,
+    Country: true,
+    DVD: false,
+    Director: true,
+    Genre: true,
+    Language: false,
+    Metascore: false,
+    Plot: false,
+    Poster: false,
+    Production: false,
+    Rated: true,
+    Ratings: false,
+    Released: true,
+    Runtime: true,
+    Title: true,
+    Type: false,
+    Website: false,
+    Writer: true,
+    Year: true,
+    imdbID: false,
+    imdbRating: false,
+    imdbVotes: false
+};
+
+function isIterable(obj) {
+    // checks for null and undefined
+    if (obj == null) {
+      return false;
+    }
+    return typeof obj[Symbol.iterator] === 'function';
+  }
+
 function build (myprops) { 
-    console.log("run buildtable", myprops);
+    let bRetVal = false;
+    let colToShow = 0;
+    let rowToShow = myprops.rowToShow;
+
+    console.log("run buildtable: rowToShow", myprops.rowToShow);
+
     let tableTitles = document.getElementById('tableId')
     if (tableTitles === null){
-        tableTitles = buildHeaderTables(myprops.columnsName);
+        console.log("MOVIETABLE - table not existing")    
+    } else{
+        // It exists. First remove it 
+        tableTitles.innerHTML='';
+        tableTitles.remove();
     }
 
-    if (myprops.search.Title !== undefined){
-        if (tableTitles != null){
-            console.log("myprops.search is ", myprops.search.Title);
-            // buildTables(myprops.search, tableTitles);
+    if (myprops.columnsName.length === colExpectedInAnySearch ){
+        colToShow = colToUseInAnySearch
+        tableTitles = buildHeaderTables(myprops.columnsName, colToShow);
+        bRetVal = true;
+    } else {
+        if (myprops.columnsName.length === colExpectedInTitleSearch){
+            let colAllowed = 0
+            let colAllowedString=[];
+            for (let anyprop in  titleFieldMask){
+                // console.log ("MOVIETABLE prop evaluated ", titleFieldMask[anyprop]);
+                if (titleFieldMask[anyprop] === true){
+                    colAllowed++;
+                    colAllowedString.push(anyprop);
+                    console.log ("MOVIETABLE Allowed prop ", anyprop);
+                } // else
+            } // end for count allowed coloums
+            console.log ("MOVIE TABLE allowed prop:", colAllowed);
+            let colToPass = [];
+            /*
+            if (colAllowed > colExpectedInTitleSearch){
+                colToPass = colAllowedString;
+            } else{
+                colToPass = myprops.columnsName;
+            }
+            */
+            colToPass = myprops.columnsName;
+            colToShow = colToPass.length;
+            tableTitles = buildHeaderTables(colToPass, colToShow);
+            bRetVal = true;
+        }else{
+            console.log("MOVIETABLE - numeber of colomns not expected: ", myprops.columnsName.length);
+            bRetVal = false;
+        }
+    }     
+
+    if (bRetVal == true){
+        if (myprops.search.Title !== undefined){
+            if (tableTitles != null){
+                console.log("myprops.search is ", myprops.search);
+                // buildTables(myprops.search, tableTitles);
+                
+                buildTables( myprops.search, tableTitles,colToShow, rowToShow);
+            }
+        } else{
+            let tempArray = myprops.search;
+            let bHasProp = false;
+            bHasProp = tempArray.hasOwnProperty('Search')
+            if ((tempArray !== null) && (tempArray !== undefined) && 
+                (tempArray.lenght !== 0) && (bHasProp === true)){
+                // console.log(tempArray)
+                let searchArray = tempArray.Search[0];
+                if (searchArray !== null){
+                    console.log("myprops.search is Iterable");
+                    buildTables(myprops.search.Search, tableTitles,colToShow, rowToShow);
+                } else {
+                    console.log("myprops.search.Search[0] is NULL");
+                }
+            }else{
+                console.log("myprops.search is NULL or undef", tempArray);
+            }
         }
     } else{
-        let tempArray = myprops.search;
-        let bHasProp = false;
-        bHasProp = tempArray.hasOwnProperty('Search')
-        if ((tempArray !== null) && (tempArray !== undefined) && 
-            (tempArray.lenght !== 0) && (bHasProp === true)){
-            console.log(tempArray)
-            let searchArray = tempArray.Search[0];
-            if (searchArray !== null){
-                console.log("myprops.search is Iterable");
-                buildTables(myprops.search.Search, tableTitles);
-            } else {
-                console.log("myprops.search.Search[0] is NULL");
-            }
-        }else{
-            console.log("myprops.search is NULL or undef", tempArray);
-        }
+        console.log(" MOVIETABLE - EXIT from build");
     }
 }
 
 
-function buildTables(jsonObject, table) {
+function buildTables(jsonObject, table,colToRepresent, rowToShow) {
+    console.log("BUILD TABLES ENTER: ", jsonObject);
+    
+    let rowCount = 0
+
+    if (isIterable(jsonObject) == true){
     for (let currentObject of jsonObject) {
-        console.log ("create current object " +currentObject);  
-        let trn = document.createElement("tr");
-        table.append(trn);
-        for (let currentProperty in currentObject) {
-            // console.log ("create current prop " +currentProperty);    
-            let td = document.createElement("td");
-            td.classList.add("backGray");
-            td.innerHTML = `${currentObject[currentProperty]}`;
-            td.addEventListener("click", gestisciClick);
-            trn.append(td);
-        }
-    }
+        if (rowCount < rowToShow){
+            // console.log ("create current object " +currentObject);  
+            let trn = document.createElement("tr");
+            table.append(trn);
+            let colCount = 0
+            for (let currentProperty in currentObject) {
+                if (colCount < colToRepresent){
+                    console.log ("create current prop " +currentProperty);    
+                    let td = document.createElement("td");
+                    td.classList.add("backGray");
+                    td.innerHTML = `${currentObject[currentProperty]}`;
+                    td.addEventListener("click", gestisciClick);
+                    trn.append(td);
+                    colCount++;
+                } // else
+            } // end for cycle columns
+            rowCount++;
+        } //else
+    } // end for cycle rows
+} else {
+    for (let currentObject in jsonObject) {
+        if (rowCount < rowToShow){
+            console.log ("create current object " +currentObject);  
+            let trn = document.createElement("tr");
+            table.append(trn);
+            let colCount = 0
+            for (let currentProperty in currentObject) {
+                if (colCount < colToRepresent){
+                    console.log ("create current prop " +currentProperty);    
+                    let td = document.createElement("td");
+                    td.classList.add("backGray");
+                    td.innerHTML = `${currentObject[currentProperty]}`;
+                    td.addEventListener("click", gestisciClick);
+                    trn.append(td);
+                    colCount++;
+                } // else
+            } // end for cycle columns
+            rowCount++;
+        } //else
+    } // end for cycle rows
+
+}
 }
 
-function buildHeaderTables(columns) {
+function buildHeaderTables(columns, toRepresent) {
     console.log( "buildHeaderTables ENTER ", columns);
     let h1 = document.getElementById('myHeaderId')
     if (h1 === null){
@@ -77,15 +200,19 @@ function buildHeaderTables(columns) {
     table.append(tr);
 
     let myyRefHeder = columns;
-    // console.log( "buildHeaderTables ", columns);
+    // console.log( "buildHeaderTables ", toRepresent);
 
     //Create Header
+    let colCounter = 0
     for (let currentProp of myyRefHeder) {
-        console.log("create current prop in header" + currentProp);
-        let thTable = document.createElement('th');
-        thTable.classList.add("backGreen");
-        thTable.innerHTML = `${currentProp}`;
-        tr.append(thTable);
+        if (colCounter < toRepresent){
+            console.log("create current prop in header" + currentProp);
+            let thTable = document.createElement('th');
+            thTable.classList.add("backGreen");
+            thTable.innerHTML = `${currentProp}`;
+            tr.append(thTable);
+            colCounter++;
+        } // 
     }
     return table;
 }
@@ -124,7 +251,6 @@ const MovieTable = (props) => {
     <div className='mainMovieTable'>
         {console.log("props: ", props)}
         {build(props)}
-        {/*console.log("MovieTable")*/}
     </div>
   )
 }

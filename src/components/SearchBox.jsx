@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import './SearchBox.css'
 class SearchBox extends Component {
   constructor (props) {
     super(props)
@@ -26,7 +26,7 @@ class SearchBox extends Component {
 
   render (props) {
     return (
-      <div>
+      <div >
         <input className='SearchBox' 
             name="fname" 
             type="text" 

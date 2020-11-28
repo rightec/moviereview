@@ -31,7 +31,7 @@ const gApiKey = "&apikey=7eac09d1"; //My authorization key
 //What i expect from DB as title
 const gColumnTable = ["Title","Year","Rated","Released","Runtime",
                     "Genre","Director","Writer"];
-const gColumnTableSearch = ["Poster","Title","Type","Year","imdbID"];
+const gColumnTableSearch = ["Title","Year", "imdbID", "Type", 'Poster'];
 //set the path to download json file
 const gPathRoot = "http://www.omdbapi.com/"
 const gQuerySearch = "?s=";
@@ -136,7 +136,7 @@ class SearchEngine extends Component {
     return (
       <div className='SearchEngine'>
           <h2>SEARCH BOX</h2>
-          <div onChange={this.onSearchChange}>
+          <div className='SearchContainer'  onChange={this.onSearchChange}>
             <SearchBox />
           </div>
           <div className='SearchPanelContainer'>
@@ -144,16 +144,16 @@ class SearchEngine extends Component {
                 Item to Show :
                 <Spin />
               </label>
-            <button className='SearchPanel' type="button" onClick={this.onSearchClick} disabled={this.state.loading}>
-              SEARCH
-            </button>
             <div className='SearchPanel' onChange={this.onChangeValue}>
               <Check />
             </div>
           </div>
+          <button className='SearchPanel' type="button" onClick={this.onSearchClick} disabled={this.state.loading}>
+              SEARCH
+            </button>
           <div id='movieTableId'>
             {console.log("review",this.state.review)}
-            {this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review}/> : null}
+            {this.state.viewTable === true ? <MovieTable columnsName={gColomnTitle} search={this.state.review} rowToShow={spinbox}/> : null}
           </div>
       </div>      
     )
