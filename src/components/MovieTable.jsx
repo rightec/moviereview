@@ -36,10 +36,11 @@ function build (myprops) {
 
 function buildTables(jsonObject, table) {
     for (let currentObject of jsonObject) {
+        console.log ("create current object " +currentObject);  
         let trn = document.createElement("tr");
         table.append(trn);
         for (let currentProperty in currentObject) {
-            console.log ("create current prop " +currentProperty);    
+            // console.log ("create current prop " +currentProperty);    
             let td = document.createElement("td");
             td.classList.add("backGray");
             td.innerHTML = `${currentObject[currentProperty]}`;

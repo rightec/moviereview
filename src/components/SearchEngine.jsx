@@ -19,7 +19,7 @@ function composePath(status) {
 
   key = status.searchbox
   let myPath = gPathRoot + qSearch + key  + gApiKey
-  console.log('myPath: ', myPath)
+  // console.log('myPath: ', myPath)
   return myPath;
   
 }
@@ -71,7 +71,7 @@ class SearchEngine extends Component {
 
     try {
       this.setState({ loading: true })
-      console.log('NEL TRY DATA: ', gPath)
+      console.log('Start Try Catch: ', gPath)
       let response = await fetch(gPath)
       // console.log('NEL TRY DATA: ', this.state.gPath)
       // let response = await fetch(this.state.gPath)
@@ -82,8 +82,8 @@ class SearchEngine extends Component {
       // throw new Error blocks the execution, and jumps directly into 'CATCH'
       if (data.error) throw new Error(data.error)
 
-      this.setState({ viewTable: true })
-      this.setState({ review: data })
+      // this.setState({ viewTable: true, review: data})
+      // this.setState({ review: data })
       localreview = {...data}
 
       // Work with review
@@ -96,13 +96,15 @@ class SearchEngine extends Component {
     } finally {
       // using setState with prevState
       // see https://css-tricks.com/understanding-react-setstate/
-      this.setState((prevState) => {
+      /*this.setState((prevState) => {
         return {
           ...this.state, // see immutables
           loading: false,
           error
         }
-      })
+      })*/
+      console.log ("Start Finally and set State")
+      this.setState({ viewTable: true, review: localreview, loading: false})
     }
   }
 
