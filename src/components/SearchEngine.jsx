@@ -5,6 +5,7 @@ import './SearchEngine.css'
 import React, { Component } from "react";
 import MovieTable from './MovieTable'
 import Spin from './SpinBox'
+import Check from './CheckBox'
 
 function composePath(status) {
   let qSearch = ""
@@ -42,11 +43,12 @@ const gYearKey = "1980";
 let gPath = ""
 let gColomnTitle=[];
 let spinbox = 1;
+let selectedOption = "Title";
+
 class SearchEngine extends Component {
   constructor() {
     super();
     this.state = {
-      selectedOption: "Title",
       searchbox: "",
       loading: false,
       error: false,
@@ -106,7 +108,7 @@ class SearchEngine extends Component {
     this.setState({ viewTable: false })
     console.log("SearchClick event: ", event.target);
     console.log("spinBox is: ", spinbox);
-    console.log("Option is:", this.state.selectedOption);
+    console.log("Option is:", selectedOption);
     console.log("Text is:", this.state.searchbox);
     gPath = composePath(this.state);
     // console.log("gPath:", this.state.gPath);
@@ -114,9 +116,6 @@ class SearchEngine extends Component {
   }
 
   onInputchange(event) {
-    /*this.setState({
-      [event.target.name]: event.target.value
-    });*/
     console.log('on Input changed',event.target.value);
   }
 
@@ -126,9 +125,10 @@ class SearchEngine extends Component {
 
   onValueChange(event) {
     console.log('onValueChange',event.target.value);
-    this.setState({
+    // selectedOption = event.target.value 
+    /*this.setState({
       selectedOption: event.target.value
-    })
+    })*/
   }
 
 /* const SearchEngine = (props) => { */
@@ -153,28 +153,7 @@ class SearchEngine extends Component {
               SEARCH
             </button>
             <div className='SearchPanel' onChange={this.onChangeValue}>
-              <div className="SearchRadio">
-                <label>
-                  <input
-                    type="radio"
-                    value="Title"
-                    checked={this.state.selectedOption === "Title"}
-                    onChange={this.onValueChange}
-                  />
-                Title
-                </label>
-              </div>
-              <div className="SearchRadio">
-                <label>
-                  <input
-                    type="radio"
-                    value="Anykey"
-                    checked={this.state.selectedOption === "Anykey"}
-                    onChange={this.onValueChange}
-                  />
-                  Any key
-                </label>
-              </div>
+              <Check />
             </div>
           </div>
           <div id='movieTableId'>
