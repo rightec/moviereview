@@ -29,7 +29,7 @@ function composePath() {
 
 const gApiKey = "&apikey=7eac09d1"; //My authorization key 
 //What i expect from DB as title
-const gColumnTable = ["Title","Year","Rated","Released","Runtime",
+const gColumnTable = ["Title","Year", 'imdbID', "Runtime",
                     "Genre","Director","Writer"];
 const gColumnTableSearch = ["Title","Year", "imdbID", "Type", 'Poster'];
 //set the path to download json file
