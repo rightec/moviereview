@@ -36,9 +36,8 @@ const gColumnTableSearch = ["Title","Year", "imdbID", "Type", 'Poster'];
 const gPathRoot = "http://www.omdbapi.com/"
 const gQuerySearch = "?s=";
 const gQueryTitle = "?t=";
-const gSearchKey ="Beau";
-const gQueryForYear = "?y=";
-const gYearKey = "1980";
+
+
 // "http://www.omdbapi.com/?s=Beau&apikey=7eac09d1";
 // let gPath = gPathRoot + gQueryForYear + gYearKey + gApiKey;
 let gPath = ""
@@ -130,9 +129,7 @@ class SearchEngine extends Component {
     console.log('SEARCH ENGINE onValueChange',event.target.value);
   }
 
-/* const SearchEngine = (props) => { */
     render() {
-      const { items } = this.state;
     return (
       <div className='SearchEngine'>
           <h2>SEARCH BOX</h2>

@@ -4,6 +4,7 @@ import './App.css'
 import Carousel from './components/Carousel'
 import SearchEngine from './components/SearchEngine'
 import DataShow from './components/DataShow'
+import Footer from './components/Footer'
 
 
 const tags = ['HOME', 'REVIEW']
@@ -48,6 +49,7 @@ class App extends React.Component {
         </div>
         {/*this.state.selectedTag === tags[0] ? <Carousel /> : <SearchEngine />*/}
         {this.state.useless === tags[0] ? <Carousel /> : <SearchEngine />}
+        <Footer footerText={'MOVIE REVIEW FOOTER'}/>
       </div>
     )
   }

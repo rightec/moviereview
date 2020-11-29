@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+// Import React, { Component } from "react";
+import React, { useState, useEffect } from 'react';
 import './MovieTable.css'
-import PopUp from './PopUp'
+// import PopUp from './PopUp'
 
 const colToUseInAnySearch = 4;
 const colExpectedInAnySearch = 5;
@@ -32,13 +33,6 @@ const titleFieldMask = {
     imdbVotes: false
 };
 
-function isIterable(obj) {
-    // checks for null and undefined
-    if (obj == null) {
-      return false;
-    }
-    return typeof obj[Symbol.iterator] === 'function';
-  }
 
 function build (myprops) { 
     let bRetVal = false;
@@ -91,7 +85,7 @@ function build (myprops) {
         }
     }     
 
-    if (bRetVal == true){
+    if (bRetVal === true){
         if (myprops.search.Title !== undefined){
             if (tableTitles != null){
                 console.log("myprops.search is ", myprops.search);
@@ -121,7 +115,6 @@ function build (myprops) {
         console.log(" MOVIETABLE - EXIT from build");
     }
 }
-
 
 function buildTables(jsonObject, table,colToRepresent, rowToShow) {
     console.log("BUILD TABLES ENTER: ", jsonObject);
@@ -219,7 +212,7 @@ function gestisciClick(e) {
         console.log(e.target.nodeName);
         let targetId = e.target.nodeName.substring(0, 2);
         if (targetId === "TD") {
-
+            managePopUp();
             if (e.target.classList.contains("backGray")) {
                 e.target.className = "backRed";
                 if (e.target.classList.contains("backRed")) {
@@ -231,7 +224,6 @@ function gestisciClick(e) {
                     console.log("Set to Gray");
                 }
             }
-
             console.log("click on TD");
         } else {
             console.log("Non hai fatto click su un TD")
@@ -241,13 +233,51 @@ function gestisciClick(e) {
     }
 }
 
-const MovieTable = (props) => {
-  return (
-    <div className='mainMovieTable'>
-        {console.log("props: ", props)}
-        {build(props)}
-    </div>
-  )
+function managePopUp(){
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    modal.style.display = "block";
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+    modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    /*
+    window.onclick = function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+    }
+    */
+}
+
+function MovieTable(props) {
+    const [seen, setSeen] = useState(false);
+
+    // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+     // seen = !seen
+     console.log("POPUP", seen);
+  });
+
+    return (
+        <div className='mainMovieTable'>
+            {console.log("props: ", props)}
+            {build(props)}
+            {/*
+            <div className="btn" onClick={() =>setSeen(!seen)}>
+                <button>New User?</button>
+            </div>
+            {seen ? <PopUp toggle={() =>setSeen(!seen)} /> : null}
+            */}
+        </div>
+    );
 }
 
 
