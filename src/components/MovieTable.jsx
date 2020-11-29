@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { Component } from "react";
 import './MovieTable.css'
+import PopUp from './PopUp'
 
 const colToUseInAnySearch = 4;
 const colExpectedInAnySearch = 5;
@@ -124,10 +125,10 @@ function build (myprops) {
 
 function buildTables(jsonObject, table,colToRepresent, rowToShow) {
     console.log("BUILD TABLES ENTER: ", jsonObject);
-    
+    // console.log("BUILD TABLES json lenght", jsonObject.length);
     let rowCount = 0
 
-    if (isIterable(jsonObject) == true){
+    if (jsonObject.length !== undefined){
     for (let currentObject of jsonObject) {
         if (rowCount < rowToShow){
             // console.log ("create current object " +currentObject);  
@@ -136,7 +137,7 @@ function buildTables(jsonObject, table,colToRepresent, rowToShow) {
             let colCount = 0
             for (let currentProperty in currentObject) {
                 if (colCount < colToRepresent){
-                    console.log ("create current prop " +currentProperty);    
+                    // console.log ("create current prop " +currentProperty);    
                     let td = document.createElement("td");
                     td.classList.add("backGray");
                     td.innerHTML = `${currentObject[currentProperty]}`;
@@ -149,26 +150,21 @@ function buildTables(jsonObject, table,colToRepresent, rowToShow) {
         } //else
     } // end for cycle rows
 } else {
-    for (let currentObject in jsonObject) {
-        if (rowCount < rowToShow){
-            console.log ("create current object " +currentObject);  
-            let trn = document.createElement("tr");
-            table.append(trn);
-            let colCount = 0
-            for (let currentProperty in currentObject) {
-                if (colCount < colToRepresent){
-                    console.log ("create current prop " +currentProperty);    
-                    let td = document.createElement("td");
-                    td.classList.add("backGray");
-                    td.innerHTML = `${currentObject[currentProperty]}`;
-                    td.addEventListener("click", gestisciClick);
-                    trn.append(td);
-                    colCount++;
-                } // else
-            } // end for cycle columns
-            rowCount++;
-        } //else
-    } // end for cycle rows
+    //There is only on row in title search - always
+    let colCount = 0
+    let trn = document.createElement("tr");
+    table.append(trn);         
+    for (let currentProperty in jsonObject) {
+        if (colCount < colToRepresent){
+            // console.log ("create current object " +currentProperty);  
+            let td = document.createElement("td");
+            td.classList.add("backGray");
+            td.innerHTML = `${jsonObject[currentProperty]}`;
+            td.addEventListener("click", gestisciClick);
+            trn.append(td);
+            colCount++;
+        } // else                    
+    } // end for cycle colomns
 
 }
 }
@@ -245,7 +241,6 @@ function gestisciClick(e) {
     }
 }
 
-
 const MovieTable = (props) => {
   return (
     <div className='mainMovieTable'>
@@ -254,5 +249,6 @@ const MovieTable = (props) => {
     </div>
   )
 }
+
 
 export default MovieTable
