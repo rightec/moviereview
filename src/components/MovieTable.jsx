@@ -230,16 +230,19 @@ function buildHeaderTables(columns, toRepresent) {
 
 function gestisciClick(e) {
     let idToFind = 0;
+    let idString = 0;
     console.log("Position is: ",e.path[0].cellIndex);
     if (e.path[0].cellIndex === gIdPos){
         // It is the right position 
-        console.log("ID is:", e.target.outerText)
+        console.log("ID is:", e.target.outerText);
+        idString = e.target.outerText;
     } else {
         // we have to move in the DOM 
         idToFind = document.getElementById("tdID_2");
         if (idToFind !== null){
             // it is a single row table
             console.log("ID is:", idToFind.outerText);
+            idString = idToFind.outerText;
         } else {
             // It is a multi-row table
             let idToParse = e.target.id.substring(5, 6); // i extract the row
@@ -248,17 +251,17 @@ function gestisciClick(e) {
             // console.log('idToSearch',idToSearch);
             idToFind = document.getElementById(idToSearch);
             console.log("ID is:", idToFind.outerText); 
-            // Here start the new query to be used to form the pop up
+            idString = idToFind.outerText;
         }
     }
-    //console.log(e);
-   
+    //console.log(e);   
     if (e.type === "click") {
         // console.log(e.target.nodeName);
         console.log(e.target);
         let targetId = e.target.nodeName.substring(0, 2);
         if (targetId === "TD") {
             managePopUp();
+            composePath(idString);
             if (e.target.classList.contains("backGray")) {
                 e.target.className = "backRed";
                 if (e.target.classList.contains("backRed")) {
@@ -281,16 +284,17 @@ function gestisciClick(e) {
 
 function managePopUp(){
     // Get the modal
-    var modal = document.getElementById("myModal");
+    let modal = document.getElementById("myModal");
 
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    let span = document.getElementsByClassName("close")[0];
 
     modal.style.display = "block";
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
-    modal.style.display = "none";
+        removeFromPopUp()
+        modal.style.display = "none";
     }
 
     // When the user clicks anywhere outside of the modal, close it
@@ -326,5 +330,107 @@ function MovieTable(props) {
     );
 }
 
+function composePath(id) {
+    // http://www.omdbapi.com/?i=tt2311804&plot=full
+    const mTbleSite='http://www.omdbapi.com/'
+    const mTbleParam='?i=';
+    const mTblePlotFull='&plot=full';
+    const mTbleApiKey='&apikey=7eac09d1';
+    const mTblePath = mTbleSite +  mTbleParam + id +mTblePlotFull  + mTbleApiKey
+    console.log('mTblePath: ', mTblePath)
+
+
+    //Execute the fetch
+    fetch(mTblePath)
+        .then(function(response) {
+            //As soon as the server answers, we verify the response
+            console.log("response.ok: " + response.ok);
+            console.log("response.redirected: " + response.redirected);
+            console.log("response.status: " + response.status);
+            console.log("response.statusText: " + response.statusText);
+            console.log("response.type: " + response.type);
+            console.log("response.url: " + response.url);
+
+            if (response.ok) {
+                //if answer is ok get the json data
+                let jsonPromise = response.json();
+                console.log("Get the data with jsonPromise: " + jsonPromise);
+                //Return the promise object to chain the fetch with another promise
+                return jsonPromise;
+            } else {
+               console.log("Error in fetching data");
+            }
+        })
+        .then(function(jsonObject) {
+            //Il contenuto remoto.
+            console.log ("jsonObject",jsonObject);
+
+            let modal = document.getElementById("modalRoot"); // Find the modal
+
+            let h2Title =  buildBeforeEnd('popTitle',modal,'h2');
+            // buildAfterEnd('popTitle',modal,'h2');
+            h2Title.innerHTML=jsonObject['Title']; 
+            let pResume =  buildBeforeEnd('popResume',modal,'div');   
+            pResume.innerHTML=jsonObject['Plot'];  
+            let imgPoster = buildBeforeEnd('popImage',modal,'img'); 
+            imgPoster.src =  jsonObject['Poster'];     
+        })
+        .catch(function(error) {
+            console.log("error is : " + error);
+        });
+
+}
+
+function buildAfterEnd(uniqueId, refTag, tag)
+{
+  //General function to build an HTML element using insertAdjacentElement("afterend")
+  let div=document.createElement(tag);
+  
+  div.id=uniqueId;
+  
+  refTag.insertAdjacentElement("afterend", div);
+
+  return(div);
+}
+
+function buildBeforeEnd(uniqueId, refTag, tag)
+{
+  //General function to build an HTML element using insertAdjacentElement("beforeend")
+  let div=document.createElement(tag);
+  
+  div.id=uniqueId;
+  
+  refTag.insertAdjacentElement("beforeend", div);
+
+  return(div);
+}
+
+function removeFromPopUp(){
+    let modal = document.getElementById("modalRoot"); // Find the modal
+    while (modal.firstElementChild) {
+        console.log('First child is', modal.firstElementChild);
+        console.log('node type', modal.firstElementChild.nodeType);
+        modal.removeChild(modal.lastElementChild);
+      }
+    
+    console.log('All children removed ');
+}
 
 export default MovieTable
+
+
+
+/****
+ * 
+ * 
+ * {"Title":"Fer-de-Lance","Year":"1974","Rated":"Not Rated","Released":"18 Oct 1974","Runtime":"100 min"
+ * ,"Genre":"Adventure, Thriller","Director":"Russ Mayberry","Writer":"Leslie Stevens",
+ * "Actors":"David Janssen, Hope Lange, Ivan Dixon, Jason Evers",
+ * "Plot":"An American submarine leaves Tierra Del Fuego, and one of its crew has secretly brought aboard a container full of poisonous fer-de-lance snakes which escape storage and bite key personnel on the submarine, causing an accident that cripples the vehicle so that it drops to the bottom of the Southern Ocean. Worse still, the snakes are still at large on the submarine and complicate the efforts of the crew to escape the sunken vessel.",
+ * "Language":"English","Country":"USA","Awards":"N/A",
+ * "Poster":"https://m.media-amazon.com/images/M/MV5BMTg5OTYzNjI4NV5BMl5BanBnXkFtZTgwMDU5NTEyMTE@._V1_SX300.jpg",
+ * "Ratings":[{"Source":"Internet Movie Database","Value":"4.9/10"}],"Metascore":"N/A","imdbRating":"4.9","imdbVotes":"126","imdbID":"tt0071494","Type":"movie","DVD":"N/A","BoxOffice":"N/A","Production":"Leslie Stevens Productions","Website":"N/A","Response":"True"}
+ * 
+ * 
+ * 
+ */
